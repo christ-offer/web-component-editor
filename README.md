@@ -22,8 +22,8 @@ These are meant to be used together, but if you want to use them independently, 
     </style>
   </head>
   <body>
-    <blog-editor></blog-editor>
-    <blog-post></blog-post>
+    <mf-editor></mf-editor>
+    <mf-post></mf-post>
   </body>
   <script>
     const editor = document.querySelector("blog-editor");
@@ -47,7 +47,7 @@ These are meant to be used together, but if you want to use them independently, 
 ```html
 <html>
   <body>
-    <blog-post></blog-post>
+    <mf-post></mf-post>
   </body>
   <script>
     const post = document.querySelector("blog-post");
