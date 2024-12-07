@@ -28,8 +28,8 @@ These are meant to be used together, but if you want to use them independently, 
     <mf-post></mf-post>
   </body>
   <script>
-    const editor = document.querySelector("blog-editor");
-    const post = document.querySelector("blog-post");
+    const editor = document.querySelector("mf-editor");
+    const post = document.querySelector("mf-post");
 
     editor.addEventListener("update", (e) => {
       // Updates the preview in the blog-post element
@@ -52,7 +52,7 @@ These are meant to be used together, but if you want to use them independently, 
     <mf-post></mf-post>
   </body>
   <script>
-    const post = document.querySelector("blog-post");
+    const post = document.querySelector("mf-post");
     // However you get the post data from your server / database, you can set it on the post component
     post.setPostData(dataFromServer);
   </script>
