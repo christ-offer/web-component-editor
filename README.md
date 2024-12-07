@@ -11,7 +11,7 @@ These are meant to be used together, but if you want to use them independently, 
 
 ### Editor with Preview
 
-<img src="screenshots/side-by-side.png" style="max-width:600px">
+<img width="600" src="screenshots/side-by-side.png">
 
 ```html
 <html>
