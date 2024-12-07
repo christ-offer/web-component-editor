@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <script src="editor.js" type="module"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <style>
+    body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  </style>
+  <body>
+    <mf-editor class="blog-editor-1234"></mf-editor>
+    <mf-post class="blog-post-1234"></mf-post>
+  </body>
+  <script>
+    document
+      .querySelector(".blog-editor-1234")
+      .addEventListener("save", (e) => {
+        console.log("Post data:", e.detail);
+        const postData = e.detail;
+        // replace with save to server/db logic here
+        const post = document.querySelector(".blog-post-1234");
+        post.setPostData(postData);
+      });
+
+    document
+      .querySelector(".blog-editor-1234")
+      .addEventListener("update", (e) => {
+        console.log("Post data:", e.detail);
+        const postData = e.detail;
+        const post = document.querySelector(".blog-post-1234");
+        post.setPostData(postData);
+      });
+  </script>
+</html>
