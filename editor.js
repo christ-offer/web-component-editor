@@ -160,6 +160,15 @@ class BlogEditor extends HTMLElement {
             children: Array.from(node.childNodes).map(parseNode)
           };
 
+          if (node.classList.contains('reference-marker')) {
+            return {
+              type: 'reference',
+              refId: node.getAttribute('data-ref-id'),
+              refType: node.getAttribute('data-ref-type'),
+              refContent: node.getAttribute('data-ref-content')
+            };
+          }
+
           // Capture formatting and attributes
           if (node.nodeName === 'A') {
             result.href = node.getAttribute('href');
@@ -260,8 +269,14 @@ class BlogPost extends HTMLElement {
                 <span class="post-modified" itemprop="dateModified">Last modified: ${modifiedDate}</span>
             </div>
         </header>
+
         <div class="post-content" itemprop="articleBody">
             ${this.renderSections(this.postData.sections)}
+        </div>
+
+        <div class="bibliography">
+            <bh-bibliography format="apa">
+            </bh-bibliography>
         </div>
       </article>
     `;
@@ -269,7 +284,9 @@ class BlogPost extends HTMLElement {
 
   renderSections(sections) {
     if (!sections) return '';
-    return sections.map(section => this.renderSection(section)).join('');
+    const renderedSections = sections.map(section => this.renderSection(section)).join('');
+
+    return renderedSections;
   }
 
   renderSection(section) {
@@ -303,6 +320,19 @@ class BlogPost extends HTMLElement {
 
   renderStructuredContent(content) {
       if (!content) return '';
+
+      // Handle reference type
+      if (content.type === 'reference') {
+        // Create the citation element
+        let citeHtml = `<bh-cite>${content.refId}<a href="#${content.refId}">Rendered citation</a></bh-cite>`;
+
+        if (!this.querySelector(`bh-reference[id="${content.refId}"]`)) {
+          citeHtml += `<bh-reference id="${content.refId}">${content.refContent}</bh-reference>`;
+        }
+
+        return citeHtml;
+      }
+
       if (typeof content === 'string') return this.escapeHtml(content);
 
       if (content.type === 'text') {
