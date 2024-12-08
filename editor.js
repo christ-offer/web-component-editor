@@ -269,38 +269,38 @@ class BlogPost extends HTMLElement {
                 <span class="post-modified" itemprop="dateModified">Last modified: ${modifiedDate}</span>
             </div>
         </header>
+
         <div class="post-content" itemprop="articleBody">
             ${this.renderSections(this.postData.sections)}
         </div>
+
+        Prerendered citation and reference
+        <bh-cite>
+          silviaLambert2015
+          <a href="#silviaLambert2015">[1]</a>
+        </bh-cite>
+
+
         <div class="post-references">
+          <span hidden>here be references</span>
         </div>
-        <bh-cite>willighagen2019</bh-cite>
 
-        <bh-reference id="willighagen2019">
-          @article{willighagen2019,
-          title = {Citation.js: a format-independent, modular bibliography tool for the browser and command line},
-          author = {Willighagen, Lars G.},
-          year = 2019,
-          month = aug,
-          keywords = {Bibliography, Javascript},
-          volume = 5,
-          pages = {e214},
-          journal = {PeerJ Computer Science},
-          issn = {2376-5992},
-          url = {https://doi.org/10.7717/peerj-cs.214},
-          doi = {10.7717/peerj-cs.214}
-          }
+        <bh-reference id="silviaLambert2015">
+          10.1080/15588742.2015.1017687
         </bh-reference>
-
-        <bh-bibliography format="apa">
-        </bh-bibliography>
+        <div class="bibliography">
+            <bh-bibliography format="apa">
+            </bh-bibliography>
+        </div>
       </article>
     `;
   }
 
   renderSections(sections) {
     if (!sections) return '';
-    return sections.map(section => this.renderSection(section)).join('');
+    const renderedSections = sections.map(section => this.renderSection(section)).join('');
+
+    return renderedSections;
   }
 
   renderSection(section) {
@@ -338,17 +338,18 @@ class BlogPost extends HTMLElement {
       // Handle reference type
       if (content.type === 'reference') {
         // Create the citation element
-        const citeHtml = `<bh-cite>${content.refId}</bh-cite>`;
+        const citeHtml = `<bh-cite>${content.refId}<a href="#${content.refId}">Rendered citation</a></bh-cite>`;
 
         // Create the reference element if it doesn't exist
         const referencesDiv = this.querySelector('.post-references');
         console.log(referencesDiv)
         if (referencesDiv && !this.querySelector(`bh-reference[id="${content.refId}"]`)) {
-          const refElement = document.createElement('bh-reference');
-          refElement.id = content.refId;
-          refElement.textContent = content.refContent;
-          referencesDiv.appendChild(refElement);
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = `<bh-reference id="${content.refId}">${content.refContent}</bh-reference>`;
+          referencesDiv.appendChild(tempDiv.firstChild);
+
         }
+        console.log(referencesDiv)
 
         return citeHtml;
       }

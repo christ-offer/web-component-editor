@@ -110,7 +110,6 @@ export class SectionManager {
         return;
     }
 
-    console.log(reference)
 
     // Create span element to represent the reference in the editor
     const span = document.createElement('span');

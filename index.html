@@ -2,7 +2,7 @@
   <head>
     <script
       type="module"
-      src="https://esm.sh/jsr/@celine/bibhtml@0.13.0"
+      src="https://esm.sh/jsr/@celine/bibhtml@1.5.0"
     ></script>
     <script src="editor.js" type="module"></script>
     <link rel="stylesheet" href="styles.css" />
@@ -28,13 +28,13 @@
         post.setPostData(postData);
       });
 
-    document
-      .querySelector(".blog-editor-1234")
-      .addEventListener("update", (e) => {
-        console.log("Post data:", e.detail);
-        const postData = e.detail;
-        const post = document.querySelector(".blog-post-1234");
-        post.setPostData(postData);
-      });
+    // document
+    //   .querySelector(".blog-editor-1234")
+    //   .addEventListener("update", (e) => {
+    //     console.log("Post data:", e.detail);
+    //     const postData = e.detail;
+    //     const post = document.querySelector(".blog-post-1234");
+    //     post.setPostData(postData);
+    //   });
   </script>
 </html>
