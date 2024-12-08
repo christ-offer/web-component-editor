@@ -160,6 +160,15 @@ class BlogEditor extends HTMLElement {
             children: Array.from(node.childNodes).map(parseNode)
           };
 
+          if (node.classList.contains('reference-marker')) {
+            return {
+              type: 'reference',
+              refId: node.getAttribute('data-ref-id'),
+              refType: node.getAttribute('data-ref-type'),
+              refContent: node.getAttribute('data-ref-content')
+            };
+          }
+
           // Capture formatting and attributes
           if (node.nodeName === 'A') {
             result.href = node.getAttribute('href');
@@ -263,6 +272,28 @@ class BlogPost extends HTMLElement {
         <div class="post-content" itemprop="articleBody">
             ${this.renderSections(this.postData.sections)}
         </div>
+        <div class="post-references">
+        </div>
+        <bh-cite>willighagen2019</bh-cite>
+
+        <bh-reference id="willighagen2019">
+          @article{willighagen2019,
+          title = {Citation.js: a format-independent, modular bibliography tool for the browser and command line},
+          author = {Willighagen, Lars G.},
+          year = 2019,
+          month = aug,
+          keywords = {Bibliography, Javascript},
+          volume = 5,
+          pages = {e214},
+          journal = {PeerJ Computer Science},
+          issn = {2376-5992},
+          url = {https://doi.org/10.7717/peerj-cs.214},
+          doi = {10.7717/peerj-cs.214}
+          }
+        </bh-reference>
+
+        <bh-bibliography format="apa">
+        </bh-bibliography>
       </article>
     `;
   }
@@ -303,6 +334,25 @@ class BlogPost extends HTMLElement {
 
   renderStructuredContent(content) {
       if (!content) return '';
+
+      // Handle reference type
+      if (content.type === 'reference') {
+        // Create the citation element
+        const citeHtml = `<bh-cite>${content.refId}</bh-cite>`;
+
+        // Create the reference element if it doesn't exist
+        const referencesDiv = this.querySelector('.post-references');
+        console.log(referencesDiv)
+        if (referencesDiv && !this.querySelector(`bh-reference[id="${content.refId}"]`)) {
+          const refElement = document.createElement('bh-reference');
+          refElement.id = content.refId;
+          refElement.textContent = content.refContent;
+          referencesDiv.appendChild(refElement);
+        }
+
+        return citeHtml;
+      }
+
       if (typeof content === 'string') return this.escapeHtml(content);
 
       if (content.type === 'text') {

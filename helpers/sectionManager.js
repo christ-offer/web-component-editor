@@ -15,6 +15,7 @@ export class SectionManager {
               <button data-format="underline" title="Underline"><u>U</u></button>
               <button data-format="strikethrough" title="Strikethrough"><s>S</s></button>
               <button data-format="link" title="Add Link"><span>🔗</span></button>
+              <button data-format="reference" title="Add Reference"><span>📎</span></button>
               <button data-format="justifyLeft" title="Align Left">⫷</button>
               <button data-format="justifyCenter" title="Center">⫸⫷</button>
               <button data-format="justifyRight" title="Align Right">⫸</button>
@@ -57,6 +58,13 @@ export class SectionManager {
         document.execCommand(format, false, null);
       }
 
+      if (format === 'reference') {
+        this.handleReference(content)
+      } else {
+        document.execCommand(format, false, null);
+      }
+
+
       content.focus();
       this.updateToolbarState(toolbar);
     });
@@ -68,6 +76,54 @@ export class SectionManager {
     content.addEventListener('mouseup', () => {
       this.updateToolbarState(toolbar);
     });
+  }
+
+  static handleReference(content) {
+    // Create a reference object in the content
+    const refType = prompt('Select reference type (bibtex/doi/wikidata/plaintext):').toLowerCase();
+    const refId = prompt('Enter reference ID:');
+    let reference;
+
+    switch(refType) {
+      case 'bibtex':
+        reference = prompt('Enter BibTeX citation:');
+        if (!reference) return;
+        break;
+
+      case 'doi':
+        reference = prompt('Enter DOI:');
+        if (!reference) return;
+        break;
+
+      case 'wikidata':
+        reference = prompt('Enter Wikidata Q-number:');
+        if (!reference) return;
+        break;
+
+      case 'plaintext':
+        reference = prompt('Enter citation text:');
+        if (!reference) return;
+        break;
+
+      default:
+        alert('Invalid reference type');
+        return;
+    }
+
+    console.log(reference)
+
+    // Create span element to represent the reference in the editor
+    const span = document.createElement('span');
+    span.className = 'reference-marker';
+    span.setAttribute('data-ref-id', refId);
+    span.setAttribute('data-ref-type', refType);
+    span.setAttribute('data-ref-content', reference);
+    span.textContent = `[${refId}]`;
+
+    // Insert at cursor position
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    range.insertNode(span);
   }
 
   static handleLink(content) {
