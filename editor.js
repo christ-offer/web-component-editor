@@ -274,20 +274,6 @@ class BlogPost extends HTMLElement {
             ${this.renderSections(this.postData.sections)}
         </div>
 
-        Prerendered citation and reference
-        <bh-cite>
-          silviaLambert2015
-          <a href="#silviaLambert2015">[1]</a>
-        </bh-cite>
-
-
-        <div class="post-references">
-          <span hidden>here be references</span>
-        </div>
-
-        <bh-reference id="silviaLambert2015">
-          10.1080/15588742.2015.1017687
-        </bh-reference>
         <div class="bibliography">
             <bh-bibliography format="apa">
             </bh-bibliography>
@@ -338,18 +324,11 @@ class BlogPost extends HTMLElement {
       // Handle reference type
       if (content.type === 'reference') {
         // Create the citation element
-        const citeHtml = `<bh-cite>${content.refId}<a href="#${content.refId}">Rendered citation</a></bh-cite>`;
+        let citeHtml = `<bh-cite>${content.refId}<a href="#${content.refId}">Rendered citation</a></bh-cite>`;
 
-        // Create the reference element if it doesn't exist
-        const referencesDiv = this.querySelector('.post-references');
-        console.log(referencesDiv)
-        if (referencesDiv && !this.querySelector(`bh-reference[id="${content.refId}"]`)) {
-          const tempDiv = document.createElement('div');
-          tempDiv.innerHTML = `<bh-reference id="${content.refId}">${content.refContent}</bh-reference>`;
-          referencesDiv.appendChild(tempDiv.firstChild);
-
+        if (!this.querySelector(`bh-reference[id="${content.refId}"]`)) {
+          citeHtml += `<bh-reference id="${content.refId}">${content.refContent}</bh-reference>`;
         }
-        console.log(referencesDiv)
 
         return citeHtml;
       }
