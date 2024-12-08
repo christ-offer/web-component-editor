@@ -1,33 +1,125 @@
 export class SectionManager {
+  static toolbarConfigs = {
+    text: {
+      formatting: [
+        { format: 'bold', icon: '<b>B</b>', title: 'Bold' },
+        { format: 'italic', icon: '<i>I</i>', title: 'Italic' },
+        { format: 'underline', icon: '<u>U</u>', title: 'Underline' },
+        { format: 'strikethrough', icon: '<s>S</s>', title: 'Strikethrough' },
+        { format: 'link', icon: '🔗', title: 'Add Link' },
+        { format: 'reference', icon: '📎', title: 'Add Reference' },
+        { format: 'justifyLeft', icon: '⫷', title: 'Align Left' },
+        { format: 'justifyCenter', icon: '⫸⫷', title: 'Center' },
+        { format: 'justifyRight', icon: '⫸', title: 'Align Right' },
+        { format: 'insertOrderedList', icon: '1.', title: 'Numbered List' },
+        { format: 'insertUnorderedList', icon: '•', title: 'Bullet List' }
+      ]
+    },
+    subheader: {
+      formatting: [
+        { format: 'bold', icon: '<b>B</b>', title: 'Bold' },
+        { format: 'italic', icon: '<i>I</i>', title: 'Italic' },
+        { format: 'justifyLeft', icon: '⫷', title: 'Align Left' },
+        { format: 'justifyCenter', icon: '⫸⫷', title: 'Center' },
+        { format: 'justifyRight', icon: '⫸', title: 'Align Right' }
+      ]
+    },
+    code: {
+      formatting: [
+        { format: 'link', icon: '🔗', title: 'Add Link' }
+      ],
+      special: [
+        {
+          type: 'language-selector',
+          options: ['html', 'css', 'javascript', 'sql', 'python', 'rust', 'bash', 'json']
+        }
+      ]
+    },
+    quote: {
+      formatting: [
+        { format: 'italic', icon: '<i>I</i>', title: 'Italic' },
+        { format: 'link', icon: '🔗', title: 'Add Link' },
+        { format: 'reference', icon: '📎', title: 'Add Reference' }
+      ]
+    },
+    callout: {
+      formatting: [
+        { format: 'bold', icon: '<b>B</b>', title: 'Bold' },
+        { format: 'italic', icon: '<i>I</i>', title: 'Italic' },
+        { format: 'underline', icon: '<u>U</u>', title: 'Underline' },
+        { format: 'strikethrough', icon: '<s>S</s>', title: 'Strikethrough' },
+        { format: 'justifyLeft', icon: '⫷', title: 'Align Left' },
+        { format: 'justifyCenter', icon: '⫸⫷', title: 'Center' },
+        { format: 'justifyRight', icon: '⫸', title: 'Align Right' },
+        { format: 'insertOrderedList', icon: '1.', title: 'Numbered List' },
+        { format: 'insertUnorderedList', icon: '•', title: 'Bullet List' }
+      ]
+    }
+  };
+
+  static generateToolbar(type) {
+    const config = this.toolbarConfigs[type] || this.toolbarConfigs.text;
+    let toolbarHTML = '<div class="formatting-toolbar">';
+
+    // Add formatting buttons
+    if (config.formatting) {
+      config.formatting.forEach(tool => {
+        toolbarHTML += `
+          <button data-format="${tool.format}" title="${tool.title}">
+            <span>${tool.icon}</span>
+          </button>
+        `;
+      });
+    }
+
+    // Add special tools
+    if (config.special) {
+      config.special.forEach(tool => {
+        if (tool.type === 'language-selector') {
+          toolbarHTML += `
+            <select class="language-selector">
+              ${tool.options.map(lang =>
+                `<option value="${lang}">${lang}</option>`
+              ).join('')}
+            </select>
+          `;
+        }
+      });
+    }
+
+    toolbarHTML += '</div>';
+    return toolbarHTML;
+  }
+
   static addSection(type, editorElement) {
     const section = document.createElement('div');
     section.className = 'section-container';
     section.dataset.sectionType = type;
+    section.dataset.language = 'javascript';
+
     section.innerHTML = `
-          <div class="section-toolbar">
-              <button class="move-up">&uarr;</button>
-              <button class="move-down">&darr;</button>
-              <button class="remove">&times;</button>
-          </div>
-          <div class="formatting-toolbar">
-              <button data-format="bold" title="Bold"><b>B</b></button>
-              <button data-format="italic" title="Italic"><i>I</i></button>
-              <button data-format="underline" title="Underline"><u>U</u></button>
-              <button data-format="strikethrough" title="Strikethrough"><s>S</s></button>
-              <button data-format="link" title="Add Link"><span>🔗</span></button>
-              <button data-format="reference" title="Add Reference"><span>📎</span></button>
-              <button data-format="justifyLeft" title="Align Left">⫷</button>
-              <button data-format="justifyCenter" title="Center">⫸⫷</button>
-              <button data-format="justifyRight" title="Align Right">⫸</button>
-              <button data-format="insertOrderedList" title="Numbered List">1.</button>
-              <button data-format="insertUnorderedList" title="Bullet List">•</button>
-          </div>
-          <div class="section-content" contenteditable="true"></div>
-      `;
+      <div class="section-toolbar">
+        <button class="move-up">&uarr;</button>
+        <button class="move-down">&darr;</button>
+        <button class="remove">&times;</button>
+      </div>
+      ${this.generateToolbar(type)}
+      <div class="section-content" contenteditable="true"></div>
+    `;
 
     if (type === 'quote') section.classList.add('quote-section');
     if (type === 'code') section.classList.add('code-section');
     if (type === 'callout') section.classList.add('callout-section');
+
+    // Add special handlers for code sections
+    if (type === 'code') {
+      const languageSelector = section.querySelector('.language-selector');
+      if (languageSelector) {
+        languageSelector.addEventListener('change', (e) => {
+          section.dataset.language = e.target.value;
+        });
+      }
+    }
 
     editorElement.querySelector('#sections-container').appendChild(section);
     editorElement.sections.add(section);

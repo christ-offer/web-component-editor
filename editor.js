@@ -144,9 +144,9 @@ class BlogEditor extends HTMLElement {
       contentElement.appendChild(createNodeFromStructured(structuredContent));
     }
 
-
     parseContentToStructured(contentElement) {
       const parseNode = (node) => {
+
         if (node.nodeType === Node.TEXT_NODE) {
           return {
             type: 'text',
@@ -210,6 +210,7 @@ class BlogEditor extends HTMLElement {
       const sections = Array.from(this.querySelectorAll('.section-container'))
         .map((section, index) => ({
           type: section.dataset.sectionType,
+          language: section.dataset.language || null,
           content: this.parseContentToStructured(section.querySelector('.section-content')),
           order_index: index
         }));
@@ -304,8 +305,9 @@ class BlogPost extends HTMLElement {
               <blockquote>${this.renderStructuredContent(section.content)}</blockquote>
           </section>`;
         case 'code':
+          // search the content tree for a language node
           return `<section class="post-code-section">
-              <pre><code>${this.renderStructuredContent(section.content)}</code></pre>
+              <pre><code lang="${section.language}">${this.renderStructuredContent(section.content)}</code></pre>
           </section>`;
         case "callout":
           return `<div class="post-callout-section">
