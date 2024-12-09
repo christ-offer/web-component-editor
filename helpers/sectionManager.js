@@ -215,6 +215,17 @@ export class SectionManager {
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
     range.insertNode(span);
+
+    // Add this: Move cursor after the reference span
+    range.setStartAfter(span);
+    range.setEndAfter(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    const space = document.createTextNode('\u00A0');
+    range.insertNode(space);
+    range.setStartAfter(space);
+    range.setEndAfter(space);
   }
 
   static handleLink(content) {

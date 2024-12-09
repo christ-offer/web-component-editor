@@ -155,11 +155,6 @@ class BlogEditor extends HTMLElement {
         }
 
         if (node.nodeType === Node.ELEMENT_NODE) {
-          const result = {
-            type: node.nodeName.toLowerCase(),
-            children: Array.from(node.childNodes).map(parseNode)
-          };
-
           if (node.classList.contains('reference-marker')) {
             return {
               type: 'reference',
@@ -168,6 +163,11 @@ class BlogEditor extends HTMLElement {
               refContent: node.getAttribute('data-ref-content')
             };
           }
+
+          const result = {
+            type: node.nodeName.toLowerCase(),
+            children: Array.from(node.childNodes).map(parseNode)
+          };
 
           // Capture formatting and attributes
           if (node.nodeName === 'A') {
@@ -275,12 +275,47 @@ class BlogPost extends HTMLElement {
             ${this.renderSections(this.postData.sections)}
         </div>
 
+        ${this.renderReferences()}
+
         <div class="bibliography">
             <bh-bibliography format="apa">
             </bh-bibliography>
         </div>
       </article>
     `;
+  }
+
+  renderReferences() {
+    // Collect all unique references from sections
+    const references = new Map();
+
+    if (this.postData.sections) {
+        this.postData.sections.forEach(section => {
+            this.collectReferences(section.content, references);
+        });
+    }
+
+    // Render all references
+    return Array.from(references.values())
+        .map(ref => `<bh-reference id="${ref.refId}">${ref.refContent}</bh-reference>`)
+        .join('');
+}
+
+collectReferences(content, references) {
+    if (!content) return;
+
+    if (content.type === 'reference') {
+        references.set(content.refId, {
+            refId: content.refId,
+            refType: content.refType,
+            refContent: content.refContent
+        });
+        return;
+    }
+
+    if (content.children) {
+        content.children.forEach(child => this.collectReferences(child, references));
+    }
   }
 
   renderSections(sections) {
@@ -325,14 +360,7 @@ class BlogPost extends HTMLElement {
 
       // Handle reference type
       if (content.type === 'reference') {
-        // Create the citation element
-        let citeHtml = `<bh-cite>${content.refId}<a href="#${content.refId}">Rendered citation</a></bh-cite>`;
-
-        if (!this.querySelector(`bh-reference[id="${content.refId}"]`)) {
-          citeHtml += `<bh-reference id="${content.refId}">${content.refContent}</bh-reference>`;
-        }
-
-        return citeHtml;
+        return `<bh-cite><a href="#${content.refId}">${content.refId}</a></bh-cite>`;
       }
 
       if (typeof content === 'string') return this.escapeHtml(content);
