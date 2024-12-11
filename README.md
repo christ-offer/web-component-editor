@@ -47,6 +47,12 @@ These are meant to be used together, but if you want to use them independently, 
 ```html
 <html>
   <head>
+    <script
+      type="module"
+      src="https://esm.sh/jsr/@celine/bibhtml@1.5.0"
+    ></script>
+    <script src="editor.js" type="module"></script>
+    <link rel="stylesheet" href="styles.css" />
     <style>
       body {
         display: grid;
@@ -79,6 +85,14 @@ These are meant to be used together, but if you want to use them independently, 
 
 ```html
 <html>
+  <head>
+    <script
+      type="module"
+      src="https://esm.sh/jsr/@celine/bibhtml@1.5.0"
+    ></script>
+    <script src="post.js" type="module"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
   <body>
     <mf-post></mf-post>
   </body>
