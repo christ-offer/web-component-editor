@@ -61,44 +61,44 @@ These are meant to be used together, but if you want to use them independently, 
 
 ## Events
 
-The `blog-editor` element emits the following events:
+The `mf-editor` element emits the following events:
 
 - `update`: Fired when the editor content is updated. The event detail contains the post data. At the moment, only when adding/removing/moving sections. Typing does not trigger this event.
 - `save`: Fired when the post is saved. The event detail contains the post data. Use this event to save the post data to your server / database.
 
 ## Styling
 
-The `blog-editor` component uses the following CSS classes:
+The `mf-editor` component uses the following CSS classes:
 
-- `editor-wrapper`: The wrapper for the editor.
-- `editor-container`: The container for the editor.
-- `section-container`: The container for each section.
-- `section-toolbar`: The toolbar for each section.
-- `section-content`: The content for each section.
-- `quote-section`: The style for quote sections.
-- `code-section`: The style for code sections.
-- `callout-section`: The style for callout sections.
-- `formatting-toolbar`: The formatting toolbar.
-- `formatting-toolbar button`: The formatting toolbar buttons. (including :hover and :active states)
-- `post-meta`: The container for the post metadata.
-- `post-meta input`: The input for the post title.
-- `post-meta textarea`: The textarea for the post summary.
-- `post-meta input`: The input for the post tags.
-- `add-section-controls`: The container for the add section controls.
-- `add-section-controls button`: The add section controls buttons.
+- `mf-editor-wrapper`: The wrapper for the editor.
+- `mf-editor-container`: The container for the editor.
+- `mf-editor-section-container`: The container for each section.
+- `mf-editor-section-toolbar`: The toolbar for each section.
+- `mf-editor-section-content`: The content for each section.
+- `mf-editor-quote-section`: The style for quote sections.
+- `mf-editor-code-section`: The style for code sections.
+- `mf-editor-callout-section`: The style for callout sections.
+- `mf-editor-formatting-toolbar`: The formatting toolbar.
+- `mf-editor-formatting-toolbar button`: The formatting toolbar buttons. (including :hover and :active states)
+- `mf-editor-post-meta`: The container for the post metadata.
+- `mf-editor-post-meta input`: The input for the post title.
+- `mf-editor-post-meta textarea`: The textarea for the post summary.
+- `mf-editor-post-meta input`: The input for the post tags.
+- `mf-editor-add-section-controls`: The container for the add section controls.
+- `mf-editor-add-section-controls button`: The add section controls buttons.
 
-The `blog-post` component uses the following CSS classes:
+The `mf-post` component uses the following CSS classes:
 
-- `blog-post`: The wrapper for the post.
-- `post-tags`: The container for the post tags.
-- `post-tag`: The style for each post tag.
-- `post-summary`: The style for the post summary.
-- `post-content`: The style for the post content.
-- `post-paragraph-section`: The style for paragraph sections.
-- `post-subheader-section`: The style for subheader sections.
-- `post-text-section`: The style for text sections.
-- `post-quote-section`: The style for quote sections.
-- `post-code-section`: The style for code sections.
-- `post-callout-section`: The style for callout sections.
+- `mf-post`: The wrapper for the post.
+- `mf-post-tags`: The container for the post tags.
+- `mf-post-tag`: The style for each post tag.
+- `mf-post-summary`: The style for the post summary.
+- `mf-post-content`: The style for the post content.
+- `mf-post-paragraph-section`: The style for paragraph sections.
+- `mf-post-subheader-section`: The style for subheader sections.
+- `mf-post-text-section`: The style for text sections.
+- `mf-post-quote-section`: The style for quote sections.
+- `mf-post-code-section`: The style for code sections.
+- `mf-post-callout-section`: The style for callout sections.
 
 You can override these styles by adding a custom stylesheet to your page.

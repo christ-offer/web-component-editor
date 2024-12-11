@@ -1,43 +1,43 @@
 export const editorStyles = `
-.editor-container {
+.mf-editor-container {
     margin: 20px auto;
 }
-.section-container {
+.mf-editor-section-container {
     margin: 20px 0;
     border: 1px solid #ddd;
     padding: 10px;
 }
-.section-toolbar {
+.mf-editor-section-toolbar {
     border-bottom: 1px solid #ddd;
     padding: 5px;
     margin-bottom: 10px;
 }
-.section-content {
+.mf-editor-section-content {
     min-height: 100px;
 }
-.quote-section {
+.mf-editor-quote-section {
     background-color: #f9f9f9;
     border-left: 4px solid #ccc;
     padding: 15px;
 }
-.code-section {
+.mf-editor-code-section {
     background-color: #f4f4f4;
     font-family: monospace;
     padding: 15px;
 }
-.callout-section {
+.mf-editor-callout-section {
     background-color: #fff8dc;
     border: 1px solid #e0d8b0;
     padding: 15px;
 }
-.formatting-toolbar {
+.mf-editor-formatting-toolbar {
     margin: 5px 0;
     padding: 5px;
     border: 1px solid #ddd;
     border-radius: 3px;
     background: #f5f5f5;
 }
-.formatting-toolbar button {
+.mf-editor-formatting-toolbar button {
     margin: 0 2px;
     padding: 5px 10px;
     background: white;
@@ -45,22 +45,22 @@ export const editorStyles = `
     border-radius: 3px;
     cursor: pointer;
 }
-.formatting-toolbar button:hover {
+.mf-editor-formatting-toolbar button:hover {
     background: #e9e9e9;
 }
-.formatting-toolbar button.active {
+.mf-editor-formatting-toolbar button.active {
     background: #e0e0e0;
 }
-.post-meta input, .post-meta textarea {
+.mf-editor-post-meta input, .post-meta textarea {
     width: 100%;
     margin-bottom: 10px;
     padding: 8px;
 }
-.add-section-controls button {
+.mf-editor-add-section-controls button {
     margin: 5px;
     padding: 8px 16px;
 }
-.editor-wrapper {
+.mf-editor-editor-wrapper {
     gap: 20px;
     margin: 0 auto;
 }`

@@ -32,14 +32,14 @@ class BlogEditor extends HTMLElement {
     }
 
     setupEventListeners() {
-      this.querySelectorAll('.add-section-controls button').forEach(button => {
+      this.querySelectorAll('.mf-editor-add-section-controls button').forEach(button => {
         button.addEventListener('click', () => {
           SectionManager.addSection(button.dataset.sectionType, this);
           this.updateEvent()
         });
       });
 
-      this.querySelector('#save-button').addEventListener('click', () => {
+      this.querySelector('#mf-editor-save-button').addEventListener('click', () => {
         const postData = this.collectPostData();
         this.dispatchEvent(new CustomEvent('save', {
           detail: postData,
@@ -47,10 +47,10 @@ class BlogEditor extends HTMLElement {
         }));
       });
 
-      this.querySelector('#sections-container').addEventListener('click', (e) => {
+      this.querySelector('#mf-editor-sections-container').addEventListener('click', (e) => {
         const button = e.target.closest('button');
         if (!button) return;
-        const section = button.closest('.section-container');
+        const section = button.closest('.mf-editor-section-container');
         if (!section) return;
 
         if (button.classList.contains('move-up')) {
@@ -70,19 +70,19 @@ class BlogEditor extends HTMLElement {
       if (!this.postData) return;
 
       // Set basic fields
-      this.querySelector('#post-title').value = this.postData.title || '';
-      this.querySelector('#post-summary').value = this.postData.summary || '';
-      this.querySelector('#post-tags').value = (this.postData.tags || []).join(', ');
+      this.querySelector('#mf-editor-post-title').value = this.postData.title || '';
+      this.querySelector('#mf-editor-post-summary').value = this.postData.summary || '';
+      this.querySelector('#mf-editor-post-tags').value = (this.postData.tags || []).join(', ');
 
       // Clear existing sections
-      const sectionsContainer = this.querySelector('#sections-container');
+      const sectionsContainer = this.querySelector('#mf-editor-sections-container');
       sectionsContainer.innerHTML = '';
 
       // Add each section
       if (this.postData.sections && Array.isArray(this.postData.sections)) {
         this.postData.sections.forEach(section => {
           const sectionElement = SectionManager.addSection(section.type, this);
-          const contentElement = sectionElement.querySelector('.section-content');
+          const contentElement = sectionElement.querySelector('.mf-editor-section-content');
 
           // Populate the section content
           this.populateSectionContent(contentElement, section.content);
@@ -98,6 +98,17 @@ class BlogEditor extends HTMLElement {
       if (!structuredContent) return;
 
       const createNodeFromStructured = (content) => {
+        // Handle references
+          if (content.type === 'reference') {
+            const referenceMarker = document.createElement('span');
+            referenceMarker.classList.add('mf-editor-reference-marker');
+            referenceMarker.setAttribute('data-ref-id', content.refId);
+            referenceMarker.setAttribute('data-ref-type', content.refType);
+            referenceMarker.setAttribute('data-ref-content', content.refContent);
+            referenceMarker.textContent = `[${content.refId}]`;
+            return referenceMarker;
+          }
+
           if (content.type === 'text') {
               return document.createTextNode(content.text);
           }
@@ -155,7 +166,7 @@ class BlogEditor extends HTMLElement {
         }
 
         if (node.nodeType === Node.ELEMENT_NODE) {
-          if (node.classList.contains('reference-marker')) {
+          if (node.classList.contains('mf-editor-reference-marker')) {
             return {
               type: 'reference',
               refId: node.getAttribute('data-ref-id'),
@@ -207,18 +218,18 @@ class BlogEditor extends HTMLElement {
     }
 
     collectPostData() {
-      const sections = Array.from(this.querySelectorAll('.section-container'))
+      const sections = Array.from(this.querySelectorAll('.mf-editor-section-container'))
         .map((section, index) => ({
           type: section.dataset.sectionType,
           language: section.dataset.language || null,
-          content: this.parseContentToStructured(section.querySelector('.section-content')),
+          content: this.parseContentToStructured(section.querySelector('.mf-editor-section-content')),
           order_index: index
         }));
 
       return {
-        title: this.querySelector('#post-title').value,
-        summary: this.querySelector('#post-summary').value,
-        tags: this.querySelector('#post-tags').value.split(',').map(t => t.trim()),
+        title: this.querySelector('#mf-editor-post-title').value,
+        summary: this.querySelector('#mf-editor-post-summary').value,
+        tags: this.querySelector('#mf-editor-post-tags').value.split(',').map(t => t.trim()),
         sections: sections
       };
     }
@@ -246,38 +257,38 @@ class BlogPost extends HTMLElement {
     const author = this.postData.author || 'Anonymous';
 
     this.innerHTML = `
-      <article class="blog-post" itemscope itemtype="http://schema.org/BlogPosting">
+      <article class="mf-post" itemscope itemtype="http://schema.org/BlogPosting">
         <header>
-            <h1 class="post-title" itemprop="headline">${this.escapeHtml(this.postData.title)}</h1>
+            <h1 class="mf-post-title" itemprop="headline">${this.escapeHtml(this.postData.title)}</h1>
             <meta itemprop="datePublished" content="${publishDate}">
             <meta itemprop="dateModified" content="${modifiedDate}">
             <meta itemprop="author" content="${author}">
             ${this.postData.tags && this.postData.tags.length > 0 && this.postData.tags[0] !== "" ? `
-                <div class="post-tags" itemprop="keywords">
+                <div class="mf-post-tags" itemprop="keywords">
                     ${this.postData.tags.map(tag =>
-                        `<span class="post-tag">${this.escapeHtml(tag)}</span>`
+                        `<span class="mf-post-tag">${this.escapeHtml(tag)}</span>`
                     ).join('')}
                 </div>
             ` : ''}
             ${this.postData.summary ? `
-                <div class="post-summary" itemprop="description">
+                <div class="mf-post-summary" itemprop="description">
                     ${this.escapeHtml(this.postData.summary)}
                 </div>
             ` : ''}
-            <div class="post-meta">
-                <span class="post-author" itemprop="author">Written by ${author}</span>
-                <span class="post-date" itemprop="datePublished">Published: ${publishDate}</span>
-                <span class="post-modified" itemprop="dateModified">Last modified: ${modifiedDate}</span>
+            <div class="mf-post-meta">
+                <span class="mf-post-author" itemprop="author">Written by ${author}</span>
+                <span class="mf-post-date" itemprop="datePublished">Published: ${publishDate}</span>
+                <span class="mf-post-modified" itemprop="dateModified">Last modified: ${modifiedDate}</span>
             </div>
         </header>
 
-        <div class="post-content" itemprop="articleBody">
+        <div class="mf-post-content" itemprop="articleBody">
             ${this.renderSections(this.postData.sections)}
         </div>
 
         ${this.renderReferences()}
 
-        <div class="bibliography">
+        <div class="mf-bibliography">
             <bh-bibliography format="apa">
             </bh-bibliography>
         </div>
