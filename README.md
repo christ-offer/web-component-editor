@@ -1,11 +1,42 @@
-# Web Component Rich Text Editor - With Preview / Post Component
-
 Disclaimer: this is a work in progress - and also very much meant for me at the moment. First to learn more about web-components, secondly - to use it with my own blog. Support not guaranteed.
+
+If I get this to a state I am happy with, I will probably publish it to JSR.
+
+# Web Component Rich Text Editor - With Preview / Post Component
 
 This is a simple web component that allows you to create rich text content with a preview pane.
 The preview pane also doubles as a post component so it can be used both for editing and displaying content.
 
 These are meant to be used together, but if you want to use them independently, you will have to handle the data parsing yourself.
+
+## Features
+
+- Rich text editor with preview
+- Post component
+- Supports:
+  - Paragraphs
+  - Subheaders
+  - Text
+  - Quotes
+  - Code
+  - Callouts
+  - Formatting
+    - Bold
+    - Italic
+    - Underline
+    - Strikethrough
+    - Left/Center/Right align
+    - Lists (ordered/unordered)
+    - Links
+    - References (Uses [celine/bibhtml](https://maxbo.me/celine/bibhtml/))
+
+### Bug that is actually a feature (I think)
+
+- Sections do not support multiline breaks, so if you want that, add a new paragraph section..
+
+### Bugs that are actually bugs
+
+- If you have not set the cursor inside a section before clicking on a formatting button - the formatting will be added to some other random element.
 
 ## Usage
 
