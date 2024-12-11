@@ -3,7 +3,7 @@ export const editorTemplate = `
   <div class="mf-editor-editor-container">
     <button id="mf-editor-save-button">Save Post</button>
     <button id="mf-editor-reset-button">Reset</button>
-    <div class="post-meta">
+    <div class="mf-editor-post-meta">
       <input type="text" id="mf-editor-post-title" placeholder="Post Title" required>
       <textarea id="mf-editor-post-summary" placeholder="Post Summary"></textarea>
       <input type="text" id="mf-editor-post-tags" placeholder="Tags (comma-separated)">

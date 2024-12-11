@@ -59,7 +59,7 @@ export class SectionManager {
 
   static generateToolbar(type) {
     const config = this.toolbarConfigs[type] || this.toolbarConfigs.text;
-    let toolbarHTML = '<div class="formatting-toolbar">';
+    let toolbarHTML = '<div class="mf-editor-formatting-toolbar">';
 
     // Add formatting buttons
     if (config.formatting) {
@@ -77,7 +77,7 @@ export class SectionManager {
       config.special.forEach(tool => {
         if (tool.type === 'language-selector') {
           toolbarHTML += `
-            <select class="language-selector">
+            <select class="mf-editor-language-selector">
               ${tool.options.map(lang =>
                 `<option value="${lang}">${lang}</option>`
               ).join('')}
@@ -93,27 +93,27 @@ export class SectionManager {
 
   static addSection(type, editorElement) {
     const section = document.createElement('div');
-    section.className = 'section-container';
+    section.className = 'mf-editor-section-container';
     section.dataset.sectionType = type;
     section.dataset.language = 'javascript';
 
     section.innerHTML = `
-      <div class="section-toolbar">
-        <button class="move-up">&uarr;</button>
-        <button class="move-down">&darr;</button>
-        <button class="remove">&times;</button>
+      <div class="mf-editor-section-toolbar">
+        <button class="mf-editor-move-up">&uarr;</button>
+        <button class="mf-editor-move-down">&darr;</button>
+        <button class="mf-editor-remove">&times;</button>
       </div>
       ${this.generateToolbar(type)}
-      <div class="section-content" contenteditable="true"></div>
+      <div class="mf-editor-section-content" contenteditable="true"></div>
     `;
 
-    if (type === 'quote') section.classList.add('quote-section');
-    if (type === 'code') section.classList.add('code-section');
-    if (type === 'callout') section.classList.add('callout-section');
+    if (type === 'quote') section.classList.add('mf-editor-quote-section');
+    if (type === 'code') section.classList.add('mf-editor-code-section');
+    if (type === 'callout') section.classList.add('mf-editor-callout-section');
 
     // Add special handlers for code sections
     if (type === 'code') {
-      const languageSelector = section.querySelector('.language-selector');
+      const languageSelector = section.querySelector('.mf-editor-language-selector');
       if (languageSelector) {
         languageSelector.addEventListener('change', (e) => {
           section.dataset.language = e.target.value;
@@ -121,10 +121,10 @@ export class SectionManager {
       }
     }
 
-    editorElement.querySelector('#sections-container').appendChild(section);
+    editorElement.querySelector('#mf-editor-sections-container').appendChild(section);
     editorElement.sections.add(section);
 
-    const content = section.querySelector('.section-content');
+    const content = section.querySelector('.mf-editor-section-content');
     content.addEventListener('input', () => {
       // console.log('input')
     });
@@ -134,8 +134,8 @@ export class SectionManager {
   };
 
   static setupFormattingToolbar(section) {
-    const toolbar = section.querySelector('.formatting-toolbar');
-    const content = section.querySelector('.section-content');
+    const toolbar = section.querySelector('.mf-editor-formatting-toolbar');
+    const content = section.querySelector('.mf-editor-section-content');
 
     toolbar.addEventListener('click', (e) => {
       const button = e.target.closest('button');
@@ -205,7 +205,7 @@ export class SectionManager {
 
     // Create span element to represent the reference in the editor
     const span = document.createElement('span');
-    span.className = 'reference-marker';
+    span.className = 'mf-editor-reference-marker';
     span.setAttribute('data-ref-id', refId);
     span.setAttribute('data-ref-type', refType);
     span.setAttribute('data-ref-content', reference);
@@ -257,7 +257,7 @@ export class SectionManager {
   }
 
   static moveSection(section, direction, editorElement) {
-    const container = editorElement.querySelector('#sections-container');
+    const container = editorElement.querySelector('#mf-editor-sections-container');
     const index = Array.from(container.children).indexOf(section);
     const newIndex = index + direction;
 

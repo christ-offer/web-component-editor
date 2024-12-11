@@ -339,24 +339,24 @@ collectReferences(content, references) {
   renderSection(section) {
     switch (section.type) {
       case 'paragraph':
-        return `<section class="post-paragraph-section">
+        return `<section class="mf-post-paragraph-section">
           ${this.renderStructuredContent(section.content)}
           </section>`;
         case 'subheader':
-          return `<section class="post-subheader-section">
+          return `<section class="mf-post-subheader-section">
               <h3>${this.renderStructuredContent(section.content)}</h3>
           </section>`;
         case 'quote':
-          return `<section class="post-quote-section">
+          return `<section class="mf-post-quote-section">
               <blockquote>${this.renderStructuredContent(section.content)}</blockquote>
           </section>`;
         case 'code':
           // search the content tree for a language node
-          return `<section class="post-code-section">
+          return `<section class="mf-post-code-section">
               <pre><code lang="${section.language}">${this.renderStructuredContent(section.content)}</code></pre>
           </section>`;
         case "callout":
-          return `<div class="post-callout-section">
+          return `<div class="mf-post-callout-section">
               <div class="callout">
                   ${this.renderStructuredContent(section.content)}
               </div>
