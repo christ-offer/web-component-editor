@@ -11,6 +11,7 @@ export const editorTemplate = `
     <div class="mf-editor-add-section-controls">
       <button data-section-type="paragraph">Add Paragraph</button>
       <button data-section-type="subheader">Add Subheader</button>
+      <button data-section-type="image">Add Image</button>
       <button data-section-type="quote">Add Quote</button>
       <button data-section-type="code">Add Code Block</button>
       <button data-section-type="callout">Add Callout</button>

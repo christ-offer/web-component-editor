@@ -24,6 +24,18 @@ export class SectionManager {
         { format: 'justifyRight', icon: '⫸', title: 'Align Right' }
       ]
     },
+    image: {
+      special: [
+        {
+          type: 'image-url',
+          placeholder: 'Enter image URL...'
+        },
+        {
+          type: 'image-caption',
+          placeholder: 'Enter image caption...'
+        }
+      ]
+    },
     code: {
       formatting: [
         { format: 'link', icon: '🔗', title: 'Add Link' }
@@ -83,6 +95,20 @@ export class SectionManager {
               ).join('')}
             </select>
           `;
+        } else if (tool.type === 'image-url') {
+          toolbarHTML += `
+            <input type="text"
+              class="mf-editor-image-url"
+              placeholder="${tool.placeholder}"
+              value="">
+          `;
+        } else if (tool.type === 'image-caption') {
+          toolbarHTML += `
+            <input type="text"
+              class="mf-editor-image-caption"
+              placeholder="${tool.placeholder}"
+              value="">
+          `;
         }
       });
     }
@@ -91,7 +117,7 @@ export class SectionManager {
     return toolbarHTML;
   }
 
-  static addSection(type, editorElement) {
+  static addSection(type, editorElement, updateFunction) {
     const section = document.createElement('div');
     section.className = 'mf-editor-section-container';
     section.dataset.sectionType = type;
@@ -121,6 +147,39 @@ export class SectionManager {
       }
     }
 
+    if (type === 'image') {
+      section.classList.add('mf-editor-image-section');
+      const content = section.querySelector('.mf-editor-section-content');
+      content.contentEditable = false; // Disable direct editing
+
+      // Add image URL handler
+      const urlInput = section.querySelector('.mf-editor-image-url');
+      const captionInput = section.querySelector('.mf-editor-image-caption');
+
+      // add a span to the content
+      content.innerHTML = `
+        <span class="mf-editor-image-marker" data-image-url="" data-image-alt=""></span>
+      `
+
+      if (urlInput) {
+        urlInput.addEventListener('change', (e) => {
+          const span = content.querySelector('span');
+          if (span) {
+            span.dataset.imageUrl = e.target.value;
+          }
+        });
+      }
+
+      if (captionInput) {
+        captionInput.addEventListener('change', (e) => {
+          const span = content.querySelector('span');
+          if (span) {
+            span.dataset.imageAlt = e.target.value;
+          }
+        });
+      }
+    }
+
     editorElement.querySelector('#mf-editor-sections-container').appendChild(section);
     editorElement.sections.add(section);
 
@@ -129,6 +188,24 @@ export class SectionManager {
       // console.log('input')
     });
     this.setupFormattingToolbar(section);
+
+    // Add event listeners for section controls
+    const moveUpBtn = section.querySelector('.mf-editor-move-up');
+    const moveDownBtn = section.querySelector('.mf-editor-move-down');
+    const removeBtn = section.querySelector('.mf-editor-remove');
+
+    moveUpBtn.addEventListener('click', () => {
+      this.moveSection(section, -1, editorElement);
+      if (updateFunction) updateFunction();
+    });
+
+    moveDownBtn.addEventListener('click', () => {
+      this.moveSection(section, 1, editorElement);
+    });
+
+    removeBtn.addEventListener('click', () => {
+      this.removeSection(section, editorElement);
+    });
 
     return section;
   };
@@ -144,18 +221,23 @@ export class SectionManager {
       e.preventDefault();
       const format = button.dataset.format;
 
+      // Check if there's a selection in the current content area
+      const selection = window.getSelection();
+      const hasSelection = selection.rangeCount > 0 &&
+                          content.contains(selection.getRangeAt(0).commonAncestorContainer);
+
+      if (!hasSelection) {
+          alert('Please select some text first');
+          return;
+      }
+
       if (format === 'link') {
-        this.handleLink(content);
+          this.handleLink(content);
+      } else if (format === 'reference') {
+          this.handleReference(content);
       } else {
-        document.execCommand(format, false, null);
+          document.execCommand(format, false, null);
       }
-
-      if (format === 'reference') {
-        this.handleReference(content)
-      } else {
-        document.execCommand(format, false, null);
-      }
-
 
       content.focus();
       this.updateToolbarState(toolbar);

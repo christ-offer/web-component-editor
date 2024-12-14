@@ -63,4 +63,29 @@ export const editorStyles = `
 .mf-editor-editor-wrapper {
     gap: 20px;
     margin: 0 auto;
+}
+.mf-editor-image-section .mf-editor-section-content {
+  text-align: center;
+}
+
+.mf-editor-image-section img {
+  max-width: 100%;
+  height: auto;
+}
+
+.mf-editor-image-url,
+.mf-editor-image-caption {
+  width: 200px;
+  margin: 0 5px;
+  padding: 2px 5px;
+}
+
+.mf-editor-image-section figure {
+  margin: 0;
+}
+
+.mf-editor-image-section figcaption {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 5px;
 }`

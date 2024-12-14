@@ -175,6 +175,14 @@ class BlogEditor extends HTMLElement {
             };
           }
 
+          if (node.classList.contains('mf-editor-image-marker')) {
+            return {
+              type: 'image',
+              url: node.dataset.imageUrl,
+              alt: node.dataset.imageAlt
+            };
+          }
+
           const result = {
             type: node.nodeName.toLowerCase(),
             children: Array.from(node.childNodes).map(parseNode)
@@ -329,6 +337,15 @@ collectReferences(content, references) {
     }
   }
 
+  renderImage(content) {
+    return `<figure>
+      <picture>
+        <img width="50%" src="${content.url}" alt="${content.alt || ''}" loading="lazy">
+      </picture>
+      <figcaption>${content.alt || ''}</figcaption>
+    </figure>`;
+  }
+
   renderSections(sections) {
     if (!sections) return '';
     const renderedSections = sections.map(section => this.renderSection(section)).join('');
@@ -345,6 +362,10 @@ collectReferences(content, references) {
         case 'subheader':
           return `<section class="mf-post-subheader-section">
               <h3>${this.renderStructuredContent(section.content)}</h3>
+          </section>`;
+        case 'image':
+          return `<section class="mf-post-image-section">
+              ${this.renderStructuredContent(section.content)}
           </section>`;
         case 'quote':
           return `<section class="mf-post-quote-section">
@@ -374,11 +395,16 @@ collectReferences(content, references) {
         return `<bh-cite><a href="#${content.refId}">${content.refId}</a></bh-cite>`;
       }
 
+      if (content.type === 'image') {
+        return this.renderImage(content);
+      }
+
       if (typeof content === 'string') return this.escapeHtml(content);
 
       if (content.type === 'text') {
         return this.escapeHtml(content.text);
       }
+
 
       if (content.type === 'root') {
         return content.children.map(child => this.renderStructuredContent(child)).join('');
