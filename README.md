@@ -16,7 +16,7 @@ These are meant to be used together, but if you want to use them independently, 
 - Supports:
   - Paragraphs
   - Subheaders
-  - Text
+  - Images (basic support for adding url and alt text)
   - Quotes
   - Code
   - Callouts
@@ -33,10 +33,6 @@ These are meant to be used together, but if you want to use them independently, 
 ### Bug that is actually a feature (I think)
 
 - Sections do not support multiline breaks, so if you want that, add a new paragraph section..
-
-### Bugs that are actually bugs
-
-- If you have not set the cursor inside a section before clicking on a formatting button - the formatting will be added to some other random element.
 
 ## Usage
 
