@@ -51,11 +51,10 @@ export class SectionManager {
     return toolbarHTML;
   }
 
-  static addSection(type, editorElement, updateFunction) {
+  static addSection(type, editorElement) {
     const section = document.createElement('div');
     section.className = 'mf-editor-section-container';
     section.dataset.sectionType = type;
-    section.dataset.language = 'javascript';
 
     section.innerHTML = `
       <div class="mf-editor-section-toolbar">
@@ -68,11 +67,11 @@ export class SectionManager {
     `;
 
     if (type === 'quote') section.classList.add('mf-editor-quote-section');
-    if (type === 'code') section.classList.add('mf-editor-code-section');
     if (type === 'callout') section.classList.add('mf-editor-callout-section');
 
     // Add special handlers for code sections
     if (type === 'code') {
+      section.classList.add('mf-editor-code-section');
       const languageSelector = section.querySelector('.mf-editor-language-selector');
       if (languageSelector) {
         languageSelector.addEventListener('change', (e) => {
