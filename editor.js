@@ -53,17 +53,21 @@ export class Editor extends HTMLElement {
         const section = button.closest('.mf-editor-section-container');
         if (!section) return;
 
-        if (button.classList.contains('move-up')) {
+        if (button.classList.contains('mf-editor-move-up')) {
             SectionManager.moveSection(section, -1, this);
             this.updateEvent()
-        } else if (button.classList.contains('move-down')) {
+        } else if (button.classList.contains('mf-editor-move-down')) {
             SectionManager.moveSection(section, 1, this);
             this.updateEvent()
-        } else if (button.classList.contains('remove')) {
+        } else if (button.classList.contains('mf-editor-remove')) {
             SectionManager.removeSection(section, this);
             this.updateEvent()
         }
       });
+
+      this.querySelector('#mf-editor-sections-container').addEventListener('input', () => {
+        this.updateEvent()
+      })
     }
 
     populateEditor() {

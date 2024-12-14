@@ -117,29 +117,7 @@ export class SectionManager {
     editorElement.querySelector('#mf-editor-sections-container').appendChild(section);
     editorElement.sections.add(section);
 
-    const content = section.querySelector('.mf-editor-section-content');
-    content.addEventListener('input', () => {
-      // console.log('input')
-    });
     this.setupFormattingToolbar(section);
-
-    // Add event listeners for section controls
-    const moveUpBtn = section.querySelector('.mf-editor-move-up');
-    const moveDownBtn = section.querySelector('.mf-editor-move-down');
-    const removeBtn = section.querySelector('.mf-editor-remove');
-
-    moveUpBtn.addEventListener('click', () => {
-      this.moveSection(section, -1, editorElement);
-      if (updateFunction) updateFunction();
-    });
-
-    moveDownBtn.addEventListener('click', () => {
-      this.moveSection(section, 1, editorElement);
-    });
-
-    removeBtn.addEventListener('click', () => {
-      this.removeSection(section, editorElement);
-    });
 
     return section;
   };
